@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+const ACCESS_TOKEN = 0;
 
 function App() {
+  const dataToSubmit = {
+    username : "test",
+    password: "tlsxoghks123",
+  };
+  const post = axios.post('http://127.0.0.1:8000/accounts/login/', dataToSubmit).then((response) => {
+    const ACCESS_TOKEN = response.data.access_token
+    console.log("ACCESS_TOKEN",ACCESS_TOKEN)
+    axios.get('http://127.0.0.1:8000/accounts/user/', {
+      headers: {
+        "Content-Type": `application/json`,
+        "Authorization": `Bearer ${ACCESS_TOKEN}`
+      }
+    }).then((response) => {
+      console.log("RESPONSE",response.data)
+    })
+    .catch((response) =>{
+      console.log("FAIL", response);
+    });
+  });
+
+
+  
+  
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <span>adsfs</span>
     </div>
+    
   );
 }
 
