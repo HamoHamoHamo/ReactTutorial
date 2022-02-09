@@ -6,26 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 // 아래를 넣으면 network error가 뜨고, 이걸 빼면 403에러가뜸
 // 아래를 넣으면 더 앞부분에서 막힘 
-Axios.defaults.xsrfHeaderName = "X-CSRFToken";
-Axios.defaults.xsrfCookieName = 'csrftoken';
-Axios.defaults.withCredentials = true
+// Axios.defaults.xsrfHeaderName = "X-CSRFToken";
+// Axios.defaults.xsrfCookieName = 'csrftoken';
+// Axios.defaults.withCredentials = true
 
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-let csrftoken = getCookie("csrftoken");
+
 
 export default function Signup() {
     const [inputs, setInputs] = useState({});
@@ -35,18 +20,17 @@ export default function Signup() {
     
 
     const onSubmit = (e) => {
-        const signupURL = "http://127.0.0.1:8000/signup/"
+        const signupURL = "http://127.0.0.1:8000/registration/"
         e.preventDefault();
 
         setErrors({});
-        console.log(csrftoken)
         
         
         Axios.post(signupURL, inputs)
             .then(response => {
                 alert("회원가입 완료");
                 console.log("response :", response);
-                navigate("/");
+                navigate("/login");
             })
             .catch(error => {
                 console.log("error :", error);

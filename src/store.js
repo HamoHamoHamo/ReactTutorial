@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext } from "react";
+import useReducerWithSideEffects, { UpdateWithSideEffect, Update } from "use-reducer-with-side-effects";
 import Cookies from 'universal-cookie';
 
 const initialState = {
@@ -13,26 +14,30 @@ const reducer = (prevState, action) => {
     const { type } = action;
     if ( type === SET_TOKEN ) {
         const { payload: refreshToken } = action;
-        return {
-            ...prevState,
-            refreshToken,
-        };
-    }
-    else if ( type === DELETE_TOKEN ) {
-        const { payload: refreshToken } = action;
-        return {
-            ...prevState,
-            refreshToken : "",
-        };
+        const newState = { ...prevState, refreshToken };
+        return UpdateWithSideEffect(newState, (state, dispatch) => {
+            cookies.set('token', refreshToken, { 
+                path: '/',
+                expires: '',
+                secure: true,
+                }
+            );
+        });
+    } else if ( type === DELETE_TOKEN ) {
+        const newState = {...prevState, refreshToken : ""};
+        
+        return UpdateWithSideEffect(newState, (state, dispatch) => {
+            cookies.set('token', '', {expires: -1});
+        });
         
     }
     return prevState;
 }
 
 export const AppProvider = ({ children }) => {
-    const [store, dispatch] = useReducer(reducer, initialState, () => ({
-        refreshToken: cookies.get('token')
-    }));
+    const [store, dispatch] = useReducerWithSideEffects(reducer, {
+        refreshToken: cookies.get('token', '')
+    });
     return (
         <AppContext.Provider value={{ store, dispatch }}>
             {children}

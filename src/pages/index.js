@@ -1,6 +1,6 @@
 import React from 'react';
 import AppLayout from '../components/AppLayout';
-import { Route, Routes  } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from './Home';
 import Login from './accounts/Login'
 import Signup from './accounts/Signup'

@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import Axios from "axios";
 import  { Alert } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from 'universal-cookie';
-
+// import Cookies from 'universal-cookie';
+import { useAppContext, setToken } from "../../store";
 
 export default function Login() {
-    const cookies = new Cookies();
-    
+    const { dispatch } = useAppContext();
     
     const [inputs, setInputs] = useState({});
-    const [errors, setErrors] = useState({});
+    const [fieldErrors, setFieldErrors] = useState({});
 
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -20,65 +19,96 @@ export default function Login() {
         }));
         // console.log(inputs);
     };
-
-    
-
-
-
     const onSubmit = (e) => {
-        const signupURL = "http://127.0.0.1:8000/login/"
         e.preventDefault();
-        setErrors({});
+        async function fn() {
+            const URL = "http://127.0.0.1:8000/login/"
+            setFieldErrors({});
 
-        Axios.post(signupURL, inputs)
+        
+            const response = Axios.post(URL, inputs)
             .then(response => {
                 alert("로그인 완료");
                 console.log("response :", response);
                 const {
                     data: { refresh_token }
                 } = response;
-                console.log("TOKEN", refresh_token)
-
-                
-                let expires = new Date();
-                expires.setTime(expires.getTime() + 5 * 60 * 1000);
-                cookies.set('token', refresh_token, { 
-                    path: '/',
-                    expires: expires,
-                    secure: true,
-                    }
-                );
-
-                // navigate("/login");
+                console.log("TOKEN", refresh_token);
+                dispatch(setToken(refresh_token));
             })
             .catch(error => {
-                console.log("error :", error);
-                console.log(error.response.data);
-                if (error.response.data) {
-                    setErrors({
-                        username : (error.response.data.username || []).join(" "),
-                        password : (error.response.data.password || []).join(" "),
-                        etc_error : (error.response.data.non_field_errors || []).join(" "),
-                    });
+                console.log("ERROR", error.response);
+                if ( error.response ) {
+                    const { data: fieldsErrorMessages } = error.response;
+                    // fieldsErrorMessages = > { username : "m1 m2", password: [] }
+                    setFieldErrors(
+                        Object.entries(fieldsErrorMessages).reduce(
+                            (acc, [fieldName, errors]) => {
+                                acc[fieldName] = errors.join(" ")
+                                
+                                return acc;
+                            },
+                            {}
+                        )
+                    )
+                    console.log("ERRRORS", fieldErrors);
                 }
+                
             });
+            
+            
+            // .then(response => {
+            //     alert("로그인 완료");
+            //     console.log("response :", response);
+            //     const {
+            //         data: { refresh_token }
+            //     } = response;
+            //     console.log("TOKEN", refresh_token)
+
+                
+            //     let expires = new Date();
+            //     expires.setTime(expires.getTime() + 5 * 60 * 1000);
+            //     cookies.set('token', refresh_token, { 
+            //         path: '/',
+            //         expires: expires,
+            //         secure: true,
+            //         }
+            //     );
+
+            //     // navigate("/login");
+            // })
+            // .catch(error => {
+            //     console.log("error :", error);
+            //     console.log(error.response.data);
+            //     if (error.response.data) {
+            //         setErrors({
+            //             username : (error.response.data.username || []).join(" "),
+            //             password : (error.response.data.password || []).join(" "),
+            //             etc_error : (error.response.data.non_field_errors || []).join(" "),
+            //         });
+            //     }
+            // });
+        }
+        fn();
+
+        
     }
 
     const onClick = () => {
-        console.log("COOKIE", cookies.get('token'));
+        console.log("FIELDSERRORS",fieldErrors);
     }
 
     return (
         <div style={{display: "flex", flexDirection:"column",}}>
             <h1>로그인</h1>
-            {errors.etc_error && <Alert type="error" message={errors.etc_error} />}
+            {fieldErrors.non_field_errors && <Alert type="error" message={fieldErrors.non_field_errors} />}
             <form onSubmit={onSubmit}>
                 <div>
-                    {errors.username && <Alert type="error" message={errors.username} />}
+                    {fieldErrors.username && <Alert type="error" message={fieldErrors.username} />}
                     <input type="text" placeholder="id" name="username" onChange={onChange} />
                 </div>
                 <div>
-                    {errors.password && <Alert type="error" message={errors.password} />}
+                    {fieldErrors.password && <Alert type="error" message={fieldErrors.password} />}
                     <input type="password" placeholder="password" name="password" onChange={onChange} />
                 </div>
                 <input type="submit" value="login" />
