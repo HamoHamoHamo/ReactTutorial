@@ -65,7 +65,7 @@ export default function Login() {
     }
 
     const onClick = () => {
-        console.log("COOKIE", cookies.get('cookie'));
+        console.log("COOKIE", cookies.get('token'));
     }
 
     return (

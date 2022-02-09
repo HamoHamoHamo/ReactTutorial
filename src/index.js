@@ -4,14 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import "antd/dist/antd.css";
 import App from './App';
 import Root from "./pages";
-import { AppProvider } from "./store";
+// import { AppProvider } from "./store";
 
 
 ReactDOM.render(
   <BrowserRouter>
-    <AppProvider>
-      <Root />
-    </AppProvider>
+    
+    <Root />
+    
   </BrowserRouter>,
   document.getElementById('root')
 );

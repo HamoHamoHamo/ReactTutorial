@@ -30,7 +30,7 @@ const reducer = (prevState, action) => {
 }
 
 export const AppProvider = ({ children }) => {
-    const [store, dispatch] = useReducer(reducer, null, () => ({
+    const [store, dispatch] = useReducer(reducer, initialState, () => ({
         refreshToken: cookies.get('token')
     }));
     return (
