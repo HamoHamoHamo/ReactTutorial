@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import  { Alert } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
 
 // 아래를 넣으면 network error가 뜨고, 이걸 빼면 403에러가뜸
 // 아래를 넣으면 더 앞부분에서 막힘 
-// Axios.defaults.xsrfHeaderName = "X-CSRFToken";
-// Axios.defaults.xsrfCookieName = 'csrftoken';
-// Axios.defaults.withCredentials = true
+// axios.defaults.xsrfHeaderName = "X-CSRFToken";
+// axios.defaults.xsrfCookieName = 'csrftoken';
+// axios.defaults.withCredentials = true
 
 
 
@@ -26,7 +26,7 @@ export default function Signup() {
         setErrors({});
         
         
-        Axios.post(signupURL, inputs)
+        axios.post(signupURL, inputs)
             .then(response => {
                 alert("회원가입 완료");
                 console.log("response :", response);

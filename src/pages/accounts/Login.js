@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import  { Alert } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 // import Cookies from 'universal-cookie';
@@ -7,7 +7,7 @@ import { useAppContext, setToken } from "../../store";
 
 export default function Login() {
     const { dispatch } = useAppContext();
-    
+    let navigate = useNavigate();
     const [inputs, setInputs] = useState({});
     const [fieldErrors, setFieldErrors] = useState({});
 
@@ -26,7 +26,7 @@ export default function Login() {
             setFieldErrors({});
 
         
-            const response = Axios.post(URL, inputs)
+            const response = axios.post(URL, inputs)
             .then(response => {
                 alert("로그인 완료");
                 console.log("response :", response);
@@ -35,6 +35,7 @@ export default function Login() {
                 } = response;
                 console.log("TOKEN", refresh_token);
                 dispatch(setToken(refresh_token));
+                navigate("/");
             })
             .catch(error => {
                 console.log("ERROR", error.response);

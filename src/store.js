@@ -14,7 +14,7 @@ const reducer = (prevState, action) => {
     const { type } = action;
     if ( type === SET_TOKEN ) {
         const { payload: refreshToken } = action;
-        const newState = { ...prevState, refreshToken };
+        const newState = { ...prevState, refreshToken, isAuthenticated: true };
         return UpdateWithSideEffect(newState, (state, dispatch) => {
             cookies.set('token', refreshToken, { 
                 path: '/',
@@ -24,7 +24,7 @@ const reducer = (prevState, action) => {
             );
         });
     } else if ( type === DELETE_TOKEN ) {
-        const newState = {...prevState, refreshToken : ""};
+        const newState = {...prevState, refreshToken: "", isAuthenticated: false};
         
         return UpdateWithSideEffect(newState, (state, dispatch) => {
             cookies.set('token', '', {expires: -1});
@@ -35,8 +35,10 @@ const reducer = (prevState, action) => {
 }
 
 export const AppProvider = ({ children }) => {
+    const refreshToken = cookies.get('token');
     const [store, dispatch] = useReducerWithSideEffects(reducer, {
-        refreshToken: cookies.get('token', '')
+        refreshToken,
+        isAuthenticated: refreshToken ? true : false
     });
     return (
         <AppContext.Provider value={{ store, dispatch }}>
