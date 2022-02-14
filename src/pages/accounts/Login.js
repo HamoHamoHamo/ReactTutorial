@@ -4,7 +4,7 @@ import  { Alert } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 // import Cookies from 'universal-cookie';
 import { useAppContext, setToken } from "../../store";
-import Api from "../../utils/AuthApi";
+import { Api } from "../../utils/SilentTokenRefresh";
 
 export default function Login() {
     const { dispatch } = useAppContext();
@@ -36,7 +36,6 @@ export default function Login() {
                 console.log("로그인 완료 토큰", { refresh_token, access_token });
                 dispatch(setToken({ refresh_token }));
                 Api.defaults.headers['Authorization'] = `Bearer ${access_token}`;
-                console.log("로그인 완료 헤더", Api.defaults.headers);
                 navigate("/");
             })
             .catch(error => {

@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect } from "react";
 import useReducerWithSideEffects, { UpdateWithSideEffect, Update } from "use-reducer-with-side-effects";
 import Cookies from 'universal-cookie';
 // import { silentRefresh } from "./utils/SilentTokenRefresh"; //불러오면 화면 안뜸
-import Api from "./utils/AuthApi";
 
 const initialState = {
     refreshToken: "",
@@ -46,7 +45,6 @@ export const AppProvider = ({ children }) => {
     });
     useEffect(()=>{
         console.log("EFFECT");
-        // silentRefresh(Api)
     },[])
     return (
         <AppContext.Provider value={{ store, dispatch }}>

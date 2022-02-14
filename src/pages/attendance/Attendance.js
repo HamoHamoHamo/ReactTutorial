@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../store";
-import Api from "../../utils/AuthApi";
-import { instance } from "../../utils/SilentTokenRefresh";
+import { Api } from "../../utils/SilentTokenRefresh";
 
 export default function Attendance() {
     const [res, setRes] = useState(undefined);
@@ -11,9 +10,8 @@ export default function Attendance() {
 
     async function onClick(){
         try{
-            console.log("헤더", Api.defaults.headers);
             
-            const response = await instance.post('check/')
+            const response = await Api.post('check/')
             // .then(res => {
             //     console.log("then resonse", res);
             //     setRes(res);

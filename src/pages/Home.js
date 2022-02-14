@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import "./Home.css";
 import { Link } from "react-router-dom";
 import { useAppContext, reducer, AppContext } from "../store";
-import Api from "../utils/AuthApi";
 
 function First(props) {
     const { auth } = props;
@@ -35,7 +34,6 @@ function First(props) {
 function Home() {
     const { store : {isAuthenticated} } = useAppContext();
     console.log("인증 >", isAuthenticated)
-    // console.log("홈 헤더", Api.defaults.headers);
     //const store = useContext(AppContext);
     //console.log("STORE", store);
 
