@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Home.css";
 import { Link } from "react-router-dom";
-import { useAppContext } from "../store";
+import { useAppContext, reducer, AppContext } from "../store";
+import Api from "../utils/AuthApi";
 
 function First(props) {
     const { auth } = props;
-    console.log("로그인확인", auth)
-    if (auth){
+    if (auth === true){
         return(
         <div class="body">
             <div>
@@ -35,7 +35,9 @@ function First(props) {
 function Home() {
     const { store : {isAuthenticated} } = useAppContext();
     console.log("인증 >", isAuthenticated)
-
+    // console.log("홈 헤더", Api.defaults.headers);
+    //const store = useContext(AppContext);
+    //console.log("STORE", store);
 
     return (
         <div class="body">

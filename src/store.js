@@ -1,6 +1,8 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import useReducerWithSideEffects, { UpdateWithSideEffect, Update } from "use-reducer-with-side-effects";
 import Cookies from 'universal-cookie';
+// import { silentRefresh } from "./utils/SilentTokenRefresh"; //불러오면 화면 안뜸
+import Api from "./utils/AuthApi";
 
 const initialState = {
     refreshToken: "",
@@ -8,18 +10,20 @@ const initialState = {
 
 const cookies = new Cookies();
 
-const AppContext = createContext(initialState);
+export const AppContext = createContext(initialState);
 
-const reducer = (prevState, action) => {
+export const reducer = (prevState, action) => {
     const { type } = action;
     if ( type === SET_TOKEN ) {
-        const { payload: refreshToken } = action;
-        const newState = { ...prevState, refreshToken, isAuthenticated: true };
+        const { payload } = action;
+        const { refresh_token: refreshToken } = payload
+        const newState = {...prevState, refreshToken, isAuthenticated: true};
         return UpdateWithSideEffect(newState, (state, dispatch) => {
             cookies.set('token', refreshToken, { 
                 path: '/',
                 expires: '',
                 secure: true,
+                //httpOnly: true, httpOnly 옵션은 ie 브라우져를 쓰거나 .com 등으로 끝나는 일반적인 도메인에만 적용가능하다.
                 }
             );
         });
@@ -38,8 +42,12 @@ export const AppProvider = ({ children }) => {
     const refreshToken = cookies.get('token');
     const [store, dispatch] = useReducerWithSideEffects(reducer, {
         refreshToken,
-        isAuthenticated: refreshToken ? true : false
+        isAuthenticated: refreshToken ? true : false,
     });
+    useEffect(()=>{
+        console.log("EFFECT");
+        // silentRefresh(Api)
+    },[])
     return (
         <AppContext.Provider value={{ store, dispatch }}>
             {children}
@@ -52,6 +60,7 @@ export const useAppContext = () => useContext(AppContext);
 // Actions
 const SET_TOKEN = "APP/SET_TOKEN";
 const DELETE_TOKEN = "APP/DELETE_TOKEN";
+
 
 // Action Creators
 export const setToken = token => ({ type: SET_TOKEN, payload: token });
