@@ -3,7 +3,6 @@ import { Navigate, Outlet } from "react-router-dom"
 import { useAppContext } from "../store";
 
 export default function LoginRequired({ element, ...kwargs }) {
-    console.log("WHAT", element, kwargs);
     const{
         store: { isAuthenticated }
     } = useAppContext();

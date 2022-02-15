@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Api, tokenRefresh } from "../utils/SilentTokenRefresh";
 import { useAppContext } from "../store";
+import layout from  "./AppLayout.module.css";
 
 function AppLayout({ children }) {
     const { store : { refreshToken } } = useAppContext();
@@ -11,15 +12,8 @@ function AppLayout({ children }) {
     },[])
     return (
         <>
-            <div style={{
-                display: "flex",
-                width: "100vw",
-                justifyContent: "center",
-                height: "100vh",
-                alignItems: "center",
-                fontSize: "24px"
-            }}>
-            {children}
+            <div className={layout.container}>
+                {children}
             </div>
         </>
     )

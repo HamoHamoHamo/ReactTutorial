@@ -7,6 +7,7 @@ import Signup from './accounts/Signup'
 import Profile from './accounts/Profile';
 import Attendance from './attendance/Attendance'
 import LoginRequired from '../utils/LoginRequired';
+import Logout from './accounts/Logout';
 
 function NotFound() {
   return <h3>NotFound</h3>;
@@ -22,6 +23,7 @@ function Root() {
         <Route element={<LoginRequired />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/attendance" element={<Attendance />} />
+          <Route path="/logout" element={<Logout />} />
         </Route>
         {/* <LoginRequiredRoute path="/profile" element={<Profile />} /> */}
         <Route path="*" element={<NotFound />} />

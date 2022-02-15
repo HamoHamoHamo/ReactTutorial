@@ -30,7 +30,7 @@ export const reducer = (prevState, action) => {
         const newState = {...prevState, refreshToken: "", isAuthenticated: false};
         
         return UpdateWithSideEffect(newState, (state, dispatch) => {
-            cookies.set('token', '', {expires: -1});
+            cookies.remove('token');
         });
         
     }

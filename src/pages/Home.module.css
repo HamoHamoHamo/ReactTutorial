@@ -1,0 +1,23 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 50vw;
+    margin-top: 50px;
+    
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    
+}
+
+.notlogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}

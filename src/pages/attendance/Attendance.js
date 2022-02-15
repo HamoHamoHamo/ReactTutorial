@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../store";
 import { Api } from "../../utils/SilentTokenRefresh";
@@ -10,8 +11,13 @@ export default function Attendance() {
 
     async function onClick(){
         try{
-            
-            const response = await Api.post('check/')
+            // const ipData = await fetch('https://geolocation-db.com/json/');
+            // const locationIp = await ipData.json();
+            const ipData = await axios.get('https://api.ipify.org?format=json');
+            const { data: { ip } } = ipData
+            console.log("IP", ip);
+
+            const response = await Api.post('check/', { ip })
             // .then(res => {
             //     console.log("then resonse", res);
             //     setRes(res);

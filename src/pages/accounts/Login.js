@@ -115,7 +115,6 @@ export default function Login() {
                 </div>
                 <input type="submit" value="login" />
             </form>
-            <button onClick={onClick}>test</button>
         </div>
     )
 }
