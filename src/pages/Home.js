@@ -5,43 +5,19 @@ import { useAppContext, reducer, AppContext } from "../store";
 import { Api } from "../utils/SilentTokenRefresh"
 
 function First(props) {
-    const [datas, setDatas] = useState({});
+    
 
     const { auth } = props;
-    async function getData() {
-        console.log("HEADER", Api.defaults.headers);
-        try{
-            const response = await Api.get('/accounts/profile/')
-            console.log("response", response);
-            const { data: { name } }= response
-            const { data: { username } }= response
-            setDatas((prev) => ({
-                ...prev,
-                name,
-                username
-            }))
-            console.log("name",datas)
-        }
-        catch(error){
-            console.log("에러", error);
-        }
-    }
-    useEffect(() => {
-        if(auth === true) {
-            
-            getData();
-        }
-    },[])
+    
 
     if (auth === true){
         return(
             <div className={styles.header}>
-                <div>{datas.name}</div>
                 <div>                    
-                    <Link to="/profile">프로필</Link>
+                    <Link to="/profile">오늘 출퇴근시간</Link>
                 </div>
                 <div>
-                    <Link to="/attendance">출석체크</Link>
+                    <Link to="/attendance">출퇴근체크</Link>
                 </div>
                 <div>
                     <Link to="/logout">로그아웃</Link>
@@ -63,11 +39,102 @@ function First(props) {
     }
 }
 
-function Home() {
+export default function Home() {
     const { store : {isAuthenticated} } = useAppContext();
     console.log("인증 >", isAuthenticated)
     //const store = useContext(AppContext);
     //console.log("STORE", store);
+    const [datas, setDatas] = useState({});
+    
+
+    async function getData() {
+        console.log("HEADER", Api.defaults.headers);
+        try{
+            const response = await Api.get('/check/list/')
+            console.log("response", response);
+            console.log("is array?", Array.isArray(response.data))
+            const { data }= response
+            setDatas(data)
+            
+        }
+        catch(error){
+            console.log("에러", error);
+        }
+    }
+    useEffect(() => {
+        if(isAuthenticated === true) {
+            
+            getData();
+        }
+    },[])
+    // console.log("DATAS", datas)
+    const arr = Object.entries(datas)
+
+    // console.log("datalist", Array.isArray(datas), arr);
+    // const dataList = arr.map(([,data], index) => {
+    //     const { id, user, datetime, ip } = data
+    //     return (
+    //         <div key={index}>
+    //             <span>{id}  </span>
+    //             <span>{user}  </span>
+    //             <span>{datetime}  </span>
+    //             <span>{ip}  </span>
+                
+    //         </div>
+    //     )
+    // })
+    let curUser = ''
+    let curArr = []
+    const result = arr.reduce(
+        (acc, [, data], index, arr) => {
+            const { id, user, datetime, ip } = data
+            if(index===0){
+                curUser = user
+            }
+            if(curUser !== user || arr.length === index+1){
+                console.log("aaaaaaaaaaaa",user)
+                acc[curUser] = curArr
+                curUser = user
+                curArr = []
+            }
+
+            const attendance = {
+                id, user, datetime, ip
+            }
+            curArr.push(attendance)
+            return acc;
+        },
+        {}
+    )
+    console.log("RESULT", result)
+    const personDataList = Object.entries(result).map(([name,data], index) => {
+        console.log("dsfsffsdf", data);
+        const personData = Object.entries(data).map(([,data], index) => {
+            const { datetime, ip } = data
+            console.log("aASDFAFD", datetime, ip)
+            return <div key={index}>{datetime}</div>
+        })
+
+        // return Object.entries(data).map(([,data]) => {
+        //     const { datetime, ip } = data
+        //     console.log("aASDFAFD", datetime, ip)
+        //     return (
+        //         <div>
+        //             <span>{name}</span>
+        //             <div>{datetime}</div>
+        //         </div>
+        //     )
+        // })
+        
+        return (
+            <div key={index}>
+                <span>{name}</span>
+                {personData}
+            </div>
+        )
+
+    })
+    
 
     if (!isAuthenticated){
         return (
@@ -75,18 +142,16 @@ function Home() {
                 <First auth={isAuthenticated} />
             </div>
         )
-    }
-    return (
-        <div className={styles.body}>
-            
-            <First auth={isAuthenticated} />
-            
-
-            <div >
-                table
+    }else{
+        return (
+            <div className={styles.body}>
+                
+                <First auth={isAuthenticated} />
+                <div className={styles.attendanceContainer}>
+                    {personDataList}
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
+    
 }
-
-export default Home;

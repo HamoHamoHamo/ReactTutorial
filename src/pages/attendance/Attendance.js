@@ -6,7 +6,7 @@ import { Api } from "../../utils/SilentTokenRefresh";
 export default function Attendance() {
     const [res, setRes] = useState(undefined);
     const{
-        store: { refreshToken, accessToken }
+        store: { refreshToken }
     } = useAppContext();
 
     async function onClick(){
@@ -23,6 +23,7 @@ export default function Attendance() {
             //     setRes(res);
             // });
             console.log("출석체크 클릭", response);
+            alert(`출석체크 완료\nip: ${ip}`)
         }
         catch(error){
             console.log("에러", error);
