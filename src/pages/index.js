@@ -21,7 +21,6 @@ function Root() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route element={<LoginRequired />}>
-          <Route path="/profile" element={<Profile />} />
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/logout" element={<Logout />} />
         </Route>

@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Home.module.css";
 import { Link } from "react-router-dom";
-import { useAppContext, reducer, AppContext } from "../store";
-import { Api } from "../utils/SilentTokenRefresh"
+import { useAppContext } from "../store";
+import { Api } from "../utils/SilentTokenRefresh";
+import { parsingDataList, createList } from "../utils/ParsingData";
 
 function First(props) {
-    
-
     const { auth } = props;
     
-
     if (auth === true){
         return(
             <div className={styles.header}>
-                <div>                    
-                    <Link to="/profile">오늘 출퇴근시간</Link>
-                </div>
                 <div>
                     <Link to="/attendance">출퇴근체크</Link>
                 </div>
@@ -42,17 +37,23 @@ function First(props) {
 export default function Home() {
     const { store : {isAuthenticated} } = useAppContext();
     console.log("인증 >", isAuthenticated)
+
+    const date = new Date();
+    const month = date.getMonth()+1;
+    const year = date.getFullYear();
+    const thisMonth = month < 10 ? `${year}-0${month}` : `${year}-${month}`;
+    // console.log("MONTH", thisMonth);
     //const store = useContext(AppContext);
     //console.log("STORE", store);
     const [datas, setDatas] = useState({});
+    const [monthly, setMonth] = useState(thisMonth);
     
 
-    async function getData() {
+    async function getData(month) {
         console.log("HEADER", Api.defaults.headers);
         try{
-            const response = await Api.get('/check/list/')
+            const response = await Api.get(`/check/monthly/${month}`)
             console.log("response", response);
-            console.log("is array?", Array.isArray(response.data))
             const { data }= response
             setDatas(data)
             
@@ -64,77 +65,45 @@ export default function Home() {
     useEffect(() => {
         if(isAuthenticated === true) {
             
-            getData();
+            getData(monthly);
         }
-    },[])
+    },[monthly])
     // console.log("DATAS", datas)
-    const arr = Object.entries(datas)
-
-    // console.log("datalist", Array.isArray(datas), arr);
-    // const dataList = arr.map(([,data], index) => {
-    //     const { id, user, datetime, ip } = data
-    //     return (
-    //         <div key={index}>
-    //             <span>{id}  </span>
-    //             <span>{user}  </span>
-    //             <span>{datetime}  </span>
-    //             <span>{ip}  </span>
-                
-    //         </div>
-    //     )
-    // })
-    let curUser = ''
-    let curArr = []
-    const result = arr.reduce(
-        (acc, [, data], index, arr) => {
-            const { id, user, datetime, ip } = data
-            if(index===0){
-                curUser = user
-            }
-            if(curUser !== user || arr.length === index+1){
-                console.log("aaaaaaaaaaaa",user)
-                acc[curUser] = curArr
-                curUser = user
-                curArr = []
-            }
-
-            const attendance = {
-                id, user, datetime, ip
-            }
-            curArr.push(attendance)
-            return acc;
-        },
-        {}
-    )
-    console.log("RESULT", result)
-    const personDataList = Object.entries(result).map(([name,data], index) => {
-        console.log("dsfsffsdf", data);
-        const personData = Object.entries(data).map(([,data], index) => {
-            const { datetime, ip } = data
-            console.log("aASDFAFD", datetime, ip)
-            return <div key={index}>{datetime}</div>
-        })
-
-        // return Object.entries(data).map(([,data]) => {
-        //     const { datetime, ip } = data
-        //     console.log("aASDFAFD", datetime, ip)
-        //     return (
-        //         <div>
-        //             <span>{name}</span>
-        //             <div>{datetime}</div>
-        //         </div>
-        //     )
-        // })
-        
-        return (
-            <div key={index}>
-                <span>{name}</span>
-                {personData}
-            </div>
-        )
-
-    })
     
+    // const result = parsingDataList(datas);
+    // console.log("RESULT", result)
+    // const personDataList = createList(result);
+    const replaceAt = function(input, index, character){
+        return input.substr(0, index) + character + input.substr(index+character.length);
+   }
+    function prevMonth() {
+        let prevMon = new Date(monthly)
+        prevMon.setMonth(prevMon.getMonth() - 1);
+        const m = prevMon.getMonth()+1;
+        const y = prevMon.getFullYear();
+        console.log("PRRE", m, y);
+        setMonth(() => {
+            return m < 10 ? `${y}-0${m}` : `${y}-${m}`
+            
+        });
+    }
+    function nextMonth() {
+        let nextMon = new Date(monthly)
+        nextMon.setMonth(nextMon.getMonth() + 1);
+        const m = nextMon.getMonth()+1;
+        const y = nextMon.getFullYear();
+        console.log("NEXT", m, y);
+        setMonth(() => {
+            return m < 10 ? `${y}-0${m}` : `${y}-${m}`
+            
+        });
+    }
+
+    function onChange(e) {
+        const { value } = e.target
+        setMonth(value);
+        console.log("VLAU", value);
+    }
 
     if (!isAuthenticated){
         return (
@@ -147,8 +116,14 @@ export default function Home() {
             <div className={styles.body}>
                 
                 <First auth={isAuthenticated} />
+                <div className={styles.middleHeader}>
+                    <input type="month" value={monthly} onChange={onChange} />
+                    <a className={styles.monthChange} onClick={prevMonth}>◀</a>
+                    {monthly} 출퇴근 시간
+                    <a className={styles.monthChange} onClick={nextMonth}>▶</a>
+                </div>
                 <div className={styles.attendanceContainer}>
-                    {personDataList}
+                    {createList(parsingDataList(datas))}
                 </div>
             </div>
         )

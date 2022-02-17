@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 // import Cookies from 'universal-cookie';
 import { useAppContext, setToken } from "../../store";
 import { Api } from "../../utils/SilentTokenRefresh";
+import styles from "../../components/AppLayout.module.css"
 
 export default function Login() {
     const { dispatch } = useAppContext();
@@ -101,7 +102,7 @@ export default function Login() {
     }
 
     return (
-        <div style={{display: "flex", flexDirection:"column",}}>
+        <div className={styles.center}>
             <h1>로그인</h1>
             {fieldErrors.non_field_errors && <Alert type="error" message={fieldErrors.non_field_errors} />}
             <form onSubmit={onSubmit}>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import  { Alert } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-
+import styles from "../../components/AppLayout.module.css"
 
 // 아래를 넣으면 network error가 뜨고, 이걸 빼면 403에러가뜸
 // 아래를 넣으면 더 앞부분에서 막힘 
@@ -66,7 +66,7 @@ export default function Signup() {
         width: "200px"
     }
     return (
-        <div>
+        <div className={styles.center}>
             <div style={{fontSize: "30px", fontWeight: "bold", marginBottom: "50px"}}>회원가입</div>
             {errors.etc_error && <Alert type="error" message={errors.etc_error} />}
             <form onSubmit={onSubmit}>

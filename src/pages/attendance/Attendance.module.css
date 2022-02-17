@@ -1,0 +1,32 @@
+.container {
+    margin-top: 100px;
+    text-align: center;
+}
+
+
+.center{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title{
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.text {
+    font-size: 20px;
+}
+
+.warning{
+    color:crimson;
+    font-weight: bold;
+}
+
+.del {
+    margin-left: 40px;
+    font-weight: bold;
+}
