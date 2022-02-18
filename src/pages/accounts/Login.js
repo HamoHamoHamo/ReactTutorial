@@ -5,7 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 // import Cookies from 'universal-cookie';
 import { useAppContext, setToken } from "../../store";
 import { Api } from "../../utils/SilentTokenRefresh";
-import styles from "../../components/AppLayout.module.css"
+import styles from "../../components/AppLayout.module.css";
+import { IP } from '../../utils/SilentTokenRefresh';
 
 export default function Login() {
     const { dispatch } = useAppContext();
@@ -24,10 +25,9 @@ export default function Login() {
     const onSubmit = (e) => {
         e.preventDefault();
         async function fn() {
-            const URL = "http://127.0.0.1:8000/login/"
             setFieldErrors({});
-
-        
+            const URL = `${IP}login/`;
+            console.log("URL", URL);
             const response = axios.post(URL, inputs)
             .then(response => {
                 alert("로그인 완료");

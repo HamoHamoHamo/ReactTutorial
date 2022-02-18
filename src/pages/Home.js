@@ -52,7 +52,7 @@ export default function Home() {
     async function getData(month) {
         console.log("HEADER", Api.defaults.headers);
         try{
-            const response = await Api.get(`/check/monthly/${month}`)
+            const response = await Api.get(`check/monthly/${month}`)
             console.log("response", response);
             const { data }= response
             setDatas(data)
@@ -73,9 +73,6 @@ export default function Home() {
     // const result = parsingDataList(datas);
     // console.log("RESULT", result)
     // const personDataList = createList(result);
-    const replaceAt = function(input, index, character){
-        return input.substr(0, index) + character + input.substr(index+character.length);
-   }
     function prevMonth() {
         let prevMon = new Date(monthly)
         prevMon.setMonth(prevMon.getMonth() - 1);

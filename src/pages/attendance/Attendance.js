@@ -68,8 +68,8 @@ export default function Attendance() {
             //     console.log("then resonse", res);
             //     setRes(res);
             // });
-            console.log("출석체크 클릭", response);
-            alert(`출석체크 완료\nip: ${ip}`)
+            console.log("출퇴근 체크 클릭", response);
+            alert(`출퇴근 체크 완료\nip: ${ip}`)
             setReload((prev)=> prev+1);
 
         }
@@ -91,9 +91,9 @@ export default function Attendance() {
     return (
         <div className={styles.center}>
             <div className={styles.warning}>한번만 누르세요</div>
-            <button onClick={onClick}>출석체크</button>
+            <button onClick={onClick}>출퇴근 체크</button>
             <div className={styles.container}>
-                <div className={styles.title}>오늘 출석체크 시간</div>
+                <div className={styles.title}>오늘 출퇴근 체크 시간</div>
                 {dataList}
             </div>
         </div>

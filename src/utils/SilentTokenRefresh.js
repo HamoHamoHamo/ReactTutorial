@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import Cookies from 'universal-cookie';
 
 
+
 const cookies = new Cookies();
 
 // const refreshRes = (req) => {
@@ -47,10 +48,12 @@ const cookies = new Cookies();
 //     return err;
 // }
 
-export { Api, tokenRefresh };
+export { Api, tokenRefresh, IP };
+
+const IP = 'http://34.64.102.231/api/'
 
 const Api = axios.create({
-    baseURL: 'http://127.0.0.1:3000/',
+    baseURL: IP,
     headers: {
         "content-type": "application/json"
     }
@@ -68,7 +71,7 @@ Api.interceptors.response.use(response => {
             const originalReq = err.config;
             // console.log("originalReq", originalReq)
 
-            if ( err.response.status === 403 && err.config && !err.config.__isRetryRequest )
+            if ( err.response.status === 401 && err.config && !err.config.__isRetryRequest )
             {   
                 originalReq._retry = true;
                 const access = await tokenRefresh(refreshToken)
@@ -101,7 +104,7 @@ Api.interceptors.response.use(response => {
 
 async function tokenRefresh(refreshToken){
     let access = ''
-    let res = await fetch('http://localhost:8000/token/refresh/', {
+    let res = await fetch(`${IP}token/refresh/`, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',

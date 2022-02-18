@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import  { Alert } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "../../components/AppLayout.module.css"
+import styles from "../../components/AppLayout.module.css";
+import { IP } from "../../utils/SilentTokenRefresh";
 
 // 아래를 넣으면 network error가 뜨고, 이걸 빼면 403에러가뜸
 // 아래를 넣으면 더 앞부분에서 막힘 
@@ -20,7 +21,7 @@ export default function Signup() {
     
 
     const onSubmit = (e) => {
-        const signupURL = "http://127.0.0.1:8000/registration/"
+        const signupURL = `${IP}registration/`
         e.preventDefault();
 
         setErrors({});

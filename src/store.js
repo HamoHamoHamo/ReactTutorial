@@ -17,6 +17,7 @@ export const reducer = (prevState, action) => {
         const { payload } = action;
         const { refresh_token: refreshToken } = payload
         const newState = {...prevState, refreshToken, isAuthenticated: true};
+        console.log("SETTOKENENNNNNN", newState);
         return UpdateWithSideEffect(newState, (state, dispatch) => {
             cookies.set('token', refreshToken, { 
                 path: '/',
