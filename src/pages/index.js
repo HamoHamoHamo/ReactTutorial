@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import Home from './Home';
 import Login from './accounts/Login'
 import Signup from './accounts/Signup'
-import Profile from './accounts/Profile';
 import Attendance from './attendance/Attendance'
 import LoginRequired from '../utils/LoginRequired';
 import Logout from './accounts/Logout';

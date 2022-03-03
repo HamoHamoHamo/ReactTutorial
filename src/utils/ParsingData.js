@@ -1,6 +1,7 @@
 import styles from "../pages/Home.module.css"
 
-const IP = "180.231.222.59";
+const KINGBUSIP = "180.231.222.59";
+const MILIIP = "210.92.31.41";
 
 // datas를 acc[유저이름] = [데이터1, 데이터2 ...] 형식으로 구분해서 저장해줌
 function parsingDataList(datas){
@@ -42,15 +43,16 @@ function createList(dataArr){
             const personData = Object.entries(data).map(([,data], index) => {
                 const { datetime, ip } = data;
                 let wrongIpStyle = '';
-                let text = datetime;
-                if(ip !== IP){
+                let date = datetime.substr(8,2)+"일";
+                let time = datetime.substr(11,);
+                if(ip !== KINGBUSIP && ip !== MILIIP){
                     wrongIpStyle = styles.wrongIp;
-                    text = `${text} IP: ${ip}`;
+                    // date = `${date} KINGBUSIP: ${ip}`;
                 }
                 // console.log("aASDFAFD", datetime, ip)
                 const styleText = `${styles.attendanceContents} ${wrongIpStyle}`
                 
-                return <div className={styleText} key={index}>{text}</div>
+                return <div className={styleText} key={index}>{date} {time}</div>
             })
             
             return (

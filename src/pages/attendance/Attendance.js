@@ -1,8 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../store";
+import LoginRequired from "../../utils/LoginRequired";
 import { Api } from "../../utils/SilentTokenRefresh";
 import styles from "./Attendance.module.css"
+import "./test";
+
 
 export default function Attendance() {
     const [datas, setDatas] = useState({});
@@ -74,7 +77,8 @@ export default function Attendance() {
 
         }
         catch(error){
-            console.log("에러", error);
+            console.log("출첵 에러", error);
+            LoginRequired()
         }
         
         // axios.post('http://127.0.0.1:8000/check/')

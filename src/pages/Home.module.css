@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: 50px;
-    width: 80vw;
+    
     
     
 }
@@ -11,7 +11,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    
+    width: 80vw;
 }
 
 .notlogin {
@@ -26,10 +26,11 @@
     margin-top: 50px;
     display: flex;
     justify-content: space-between;
-
+    
 }
 
 .attendanceName{
+    text-align: center;
     margin-bottom: 40px;
     font-weight: 500;
     font-size: 25px;
@@ -37,14 +38,19 @@
 
 .attendanceContents{
     font-size: 20px;
+    
+    margin: 10px;
+    
 }
 
 .middleHeader{
-    display:flex;
+    display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 100px;
     font-size: 30px;
     font-weight: bold;
+    position: relative;
 }
 
 .wrongIp{
@@ -54,4 +60,42 @@
 .monthChange{
     margin-left: 20px;
     margin-right: 20px;
+}
+
+.calendar{
+    border: none;
+    border-bottom: 2px solid black;
+    position: absolute;
+    left: 0;
+    width: 20vw;
+    font-size: 30px;
+}
+@media screen and (max-width:767px) {
+    /* 모바일 */
+    .calendar{
+        font-size: 18px;
+        width: 25vw;
+        position: relative;
+        margin-bottom: 25px;
+        
+    }
+    .middleHeaderTitle{
+        font-size: 20px;
+    }
+    .monthChange{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .middleHeader{
+        display: block;
+        text-align: center;
+    }
+    .attendanceName{
+        font-size: 15px;
+    }
+    .attendanceContents{
+        font-size: 13px;
+        margin: 5px;
+        text-align: center;
+    }
 }

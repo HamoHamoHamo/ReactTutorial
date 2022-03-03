@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import  { Alert } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import Cookies from 'universal-cookie';
 import { useAppContext, setToken } from "../../store";
 import { Api } from "../../utils/SilentTokenRefresh";
 import styles from "../../components/AppLayout.module.css";
 import { IP } from '../../utils/SilentTokenRefresh';
+import loginStyles from "./Login.module.css"
 
 export default function Login() {
     const { dispatch } = useAppContext();
@@ -32,11 +33,11 @@ export default function Login() {
             .then(response => {
                 alert("로그인 완료");
                 const {
-                    data: { refresh_token, access_token }
+                    data: { refresh_token: refreshToken, access_token: accessToken }
                 } = response;
-                console.log("로그인 완료 토큰", { refresh_token, access_token });
-                dispatch(setToken({ refresh_token }));
-                Api.defaults.headers['Authorization'] = `Bearer ${access_token}`;
+                console.log("로그인 완료 토큰", { refreshToken, accessToken });
+                dispatch(setToken({ refreshToken }));
+                Api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
                 navigate("/");
             })
             .catch(error => {
@@ -103,18 +104,21 @@ export default function Login() {
 
     return (
         <div className={styles.center}>
-            <h1>로그인</h1>
+            <h1 style={{color: "#40a9ff", fontSize: "40px", fontWeight: "bold"}}>로그인</h1>
             {fieldErrors.non_field_errors && <Alert type="error" message={fieldErrors.non_field_errors} />}
-            <form onSubmit={onSubmit}>
+            <form style={{display:'flex'}} onSubmit={onSubmit}>
                 <div>
-                    {fieldErrors.username && <Alert type="error" message={fieldErrors.username} />}
-                    <input type="text" placeholder="id" name="username" onChange={onChange} />
+                    <div>
+                        {fieldErrors.username && <Alert type="error" message={fieldErrors.username} />}
+                        <input className={loginStyles.input} type="text" placeholder="id" name="username" onChange={onChange} />
+                    </div>
+                    <div>
+                        {fieldErrors.password && <Alert type="error" message={fieldErrors.password} />}
+                        <input className={`${loginStyles.input} ${loginStyles.inputMiddle}`} type="password" placeholder="password" name="password" onChange={onChange} />
+                    </div>
                 </div>
-                <div>
-                    {fieldErrors.password && <Alert type="error" message={fieldErrors.password} />}
-                    <input type="password" placeholder="password" name="password" onChange={onChange} />
-                </div>
-                <input type="submit" value="login" />
+                
+                <input className={loginStyles.loginButton} style={{backgroundColor: "#40a9ff", color: 'white'}} type="submit" value="LOGIN" />
             </form>
         </div>
     )

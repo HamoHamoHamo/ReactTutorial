@@ -1,0 +1,12 @@
+.input {
+    border: 3px solid #1890ff;
+}
+.inputMiddle {
+    border-top: none;
+}
+
+.loginButton {
+    border: 3px solid #1890ff;
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+}

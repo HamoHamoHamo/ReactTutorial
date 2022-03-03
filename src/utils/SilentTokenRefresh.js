@@ -76,7 +76,11 @@ Api.interceptors.response.use(response => {
                 originalReq._retry = true;
                 const access = await tokenRefresh(refreshToken)
                 console.log("GET ACCESS", access);
+                if (!access){
+                    window.alert('인증실패\n로그아웃 후 재시도하세요')
 
+                    
+                }
                 
                 originalReq.headers['Authorization'] = `Bearer ${access}`;
                 
@@ -122,6 +126,6 @@ async function tokenRefresh(refreshToken){
         // console.log("RES", res);
         access = res.access;
         Api.defaults.headers['Authorization'] = `Bearer ${access}`;
-    });
+    })
     return access
 };

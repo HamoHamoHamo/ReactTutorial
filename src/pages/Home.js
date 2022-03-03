@@ -35,9 +35,10 @@ function First(props) {
 }
 
 export default function Home() {
-    const { store : {isAuthenticated} } = useAppContext();
-    console.log("인증 >", isAuthenticated)
-
+    const { store : {isAuthenticated, accessToken} } = useAppContext();
+    console.log("인증 >", isAuthenticated);
+    console.log("ACCESSTOken", accessToken);
+    console.log("헤더", Api.defaults.headers);
     const date = new Date();
     const month = date.getMonth()+1;
     const year = date.getFullYear();
@@ -114,10 +115,12 @@ export default function Home() {
                 
                 <First auth={isAuthenticated} />
                 <div className={styles.middleHeader}>
-                    <input type="month" value={monthly} onChange={onChange} />
-                    <a className={styles.monthChange} onClick={prevMonth}>◀</a>
-                    {monthly} 출퇴근 시간
-                    <a className={styles.monthChange} onClick={nextMonth}>▶</a>
+                    <input className={styles.calendar} type="month" value={monthly} onChange={onChange} />
+                    <div className={styles.middleHeaderTitle}>
+                        <a className={styles.monthChange} onClick={prevMonth}>◀</a>
+                        {monthly} 출퇴근 시간
+                        <a className={styles.monthChange} onClick={nextMonth}>▶</a>
+                    </div>
                 </div>
                 <div className={styles.attendanceContainer}>
                     {createList(parsingDataList(datas))}
